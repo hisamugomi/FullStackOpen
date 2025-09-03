@@ -15,15 +15,30 @@ const App = () => {
       .getAll()
       .then(response => {
         setPersons(response)
-        console.log(response)
       })
       .catch(error => {
         console.error("failed to fetch data\n", error)
       })
   }, [])
 
+  const FilteredDisplay = ({ persons, search }) => {
+    const filteredNames = persons.filter((person) =>
+      person.name.toLowerCase().includes(search.toLowerCase())
+    )
+    return (
+      <div>
+        {filteredNames.map(person =>
+          <Person
+            key={person.id}
+            person={person}
+            deletePerson = {() => deletePerson(person.id)}
+          />
+        )}
+      </div>
+    )
+  }
 
-  const Person = ({ person, deletePerson }) => {
+   const Person = ({ person, deletePerson }) => {
     return (
       <li>
         {person.name} {person.number}
@@ -31,26 +46,24 @@ const App = () => {
       </li>
     )
   }
-
-  const FilteredDisplay = ({ persons, search }) => {
-    const filteredNames = persons.filter((person) =>
-      person.name.toLowerCase().includes(search.toLowerCase())
-    )
-
-    return (
-      <div>
-        {filteredNames.map(person =>
-          <Person
-            key={person.id}
-            person={person}
-          />
-        )}
-      </div>
-    )
-  }
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
+
+  const deletePerson = (id) => {
+    if (window.confirm(`Delete person with id ${id}?`)) {
+      personsservice
+        .deleteph(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+          console.log('Person deleted successfully')
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error)
+          alert('Failed to delete person')
+        })
+    }
+  }
 
   return (
     <>

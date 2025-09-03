@@ -13,13 +13,18 @@ const getAll = () => {
     })
 }
 
+
+
   const create = newObject => {
     return axios.post(baseUrl, newObject).then(response => response.data)
   }
 
-  const deleteph = (id, newObject) => {
-    const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then(response => response.data)
+  const deleteph = (id) => {
+    return axios.delete(`${baseUrl}/${id}`)
+      .then(response => {
+        console.log('deleted item ', response.status)
+        return response
+      })
   }
 
 export default {
