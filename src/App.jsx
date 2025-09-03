@@ -19,7 +19,7 @@ const App = () => {
       .catch(error => {
         console.error("failed to fetch data\n", error)
       })
-  }, [])
+  }, []);
 
   const FilteredDisplay = ({ persons, search }) => {
     const filteredNames = persons.filter((person) =>
