@@ -6,8 +6,9 @@ import axios from 'axios'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newPerson, setPerson] = useState('')
+  const [newPerson, setnewPerson] = useState('')
   const [search, setSearch] = useState('')
+  const [newph, setnewph] = useState('')
 
 
   useEffect(() => {
@@ -64,17 +65,60 @@ const App = () => {
         })
     }
   }
+  const addPh = (event) => {
+    event.preventDefault()
+  const addPerson = (newph, newPerson) => {
+    if (persons.map(name => name.name).find((element) => element === newPerson)) {
+      alert(`${newPerson} is already added to phonebook`)
+      console.log('Duplicate!')
+    }
+    else {
+      const person = {
+        name: newPerson,
+        number: newph,
+        id: (persons.length + 1)
+      }
+      setPersons(persons.concat(person))
+      setnewPerson('')
+      setnewph('')
+    }
+  
+    const person = {
+      name : newPerson,
+      number : newph,
+      id : [persons.length + 1]
+    }
+  }
+  addPerson(newph, newPerson)
+}
 
-  return (
-    <>
-<div>
+  const handlePersonadd = (event) => {
+    setnewPerson(event.target.value)
+  }
+
+  const handlePhoneadd = (event) => {
+    setnewph(event.target.value)
+  }
+
+return (
+  <>
+    <div>
       <h1>Phonebook</h1>
       <div>
-        filter shown with <input value={search} onChange={handleSearchChange}/>
+        filter shown with <input value={search} onChange={handleSearchChange} />
       </div>
+      <form onSubmit={addPh} >
+        <div>
+          name: <input value={newPerson} onChange={handlePersonadd}/>
+        </div>
+        <div>phone number: <input value={newph} onChange={handlePhoneadd}/></div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
       <FilteredDisplay persons={persons} search={search} />
     </div>
-    </>
+  </>
   )
 }
 
